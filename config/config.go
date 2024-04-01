@@ -148,6 +148,8 @@ var (
 		// When native histogram feature flag is enabled, ScrapeProtocols default
 		// changes to DefaultNativeHistogramScrapeProtocols.
 		ScrapeProtocols: DefaultScrapeProtocols,
+		// Go runtime tuning.
+		GoGC: 50,
 	}
 
 	// DefaultScrapeConfig is the default scrape configuration.
@@ -422,6 +424,8 @@ type GlobalConfig struct {
 	// Keep no more than this many dropped targets per job.
 	// 0 means no limit.
 	KeepDroppedTargets uint `yaml:"keep_dropped_targets,omitempty"`
+	// The Go garbage collection target percentage.
+	GoGC int `yaml:"gogc,omitempty"`
 }
 
 // ScrapeProtocol represents supported protocol for scraping metrics.

@@ -28,6 +28,8 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime"
+	"runtime/debug"
+	"strconv"
 	"strings"
 	"sync"
 	"syscall"
@@ -1365,6 +1367,12 @@ func reloadConfig(filename string, expandExternalLabels, enableExemplarStorage b
 	}
 	if failed {
 		return fmt.Errorf("one or more errors occurred while applying the new configuration (--config.file=%q)", filename)
+	}
+
+	oldGoGC := debug.SetGCPercent(conf.GlobalConfig.GoGC)
+	os.Setenv("GOGC", strconv.Itoa(conf.GlobalConfig.GoGC))
+	if oldGoGC != conf.GlobalConfig.GoGC {
+		level.Info(logger).Log("msg", "updated GOGC", "old", oldGoGC, "new", conf.GlobalConfig.GoGC)
 	}
 
 	noStepSuqueryInterval.Set(conf.GlobalConfig.EvaluationInterval)
